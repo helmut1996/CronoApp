@@ -140,6 +140,7 @@ fun ContentAddView(it: PaddingValues, navController: NavController, cronometroVM
                 )
                 cronometroVM.detener()
                 navController.popBackStack()
+
             }) {
                 Text(text = "Guardar")
             }
