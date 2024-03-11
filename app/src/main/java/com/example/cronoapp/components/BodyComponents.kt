@@ -28,3 +28,11 @@ fun MainTextField(value: String, onValueChange: (String) -> Unit, label: String)
 
     )
 }
+
+@Composable
+fun formatTiempo(tiempo:Long):String{
+    val segundos = (tiempo/1000) % 60
+    val minutos = (tiempo/1000/60) % 60
+    val horas = tiempo/1000/3600
+    return String.format("%02d:%02d:%02d",horas,minutos,segundos)
+}
