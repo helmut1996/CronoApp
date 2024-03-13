@@ -16,6 +16,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -76,6 +77,10 @@ fun ContentEditView(it: PaddingValues,
         cronometroVM.crono()
     }
 
+    LaunchedEffect(Unit) {
+        cronometroVM.getCronoById(id)
+    }
+
     Column(
         modifier = Modifier
             .padding(it)
@@ -88,7 +93,7 @@ fun ContentEditView(it: PaddingValues,
             fontWeight = FontWeight.Bold
         )
         
-        Text(text = id.toString())
+
 
         Row(
             horizontalArrangement = Arrangement.Center,
@@ -113,42 +118,33 @@ fun ContentEditView(it: PaddingValues,
             }
 
 
-            CircleButton(
-                icon = painterResource(id = R.drawable.stop),
-                enabled = !state.cronometroActivo
-            ) {
-                cronometroVM.detener()
-
-            }
-
-            //mostar guardar
-            CircleButton(
-                icon = painterResource(id = R.drawable.save),
-                enabled = state.showSaveButton
-            ) {
-                cronometroVM.showTextField()
-
-            }
         }
-        if (state.showTextField){
+
             MainTextField(value = state.title,
                 onValueChange = {cronometroVM.onValue(it)},
                 label ="Title"
             )
 
             Button(onClick = {
-                cronosVM.addCrono(
+                cronosVM.updateCrono(
                     Cronos(
+                        id =  id,
                         title = state.title,
                         crono = cronometroVM.tiempo
                     )
                 )
-                cronometroVM.detener()
+
                 navController.popBackStack()
 
             }) {
-                Text(text = "Guardar")
+                Text(text = "Editar")
+            }
+
+        DisposableEffect(Unit) {
+            onDispose {
+                cronometroVM.detener()
             }
         }
+
     }
 }
